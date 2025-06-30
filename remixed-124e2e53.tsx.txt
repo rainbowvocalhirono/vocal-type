@@ -1,0 +1,343 @@
+import React, { useState } from 'react';
+
+const VoiceTypeDiagnosis = () => {
+  const [currentQuestion, setCurrentQuestion] = useState(0);
+  const [answers, setAnswers] = useState([]);
+  const [result, setResult] = useState(null);
+
+  const questions = [
+    {
+      question: "歌うとき、地声で歌うことが多いですか？",
+      options: [
+        { text: "はい、地声でパワフルに歌います", type: "pull" },
+        { text: "いいえ、裏声やミックスが多いです", type: "light" },
+        { text: "どちらも使い分けます", type: "flip" },
+        { text: "地声は出るけど、コントロールが難しいです", type: "mix" }
+      ]
+    },
+    {
+      question: "高音域について当てはまるものは？",
+      options: [
+        { text: "高音を張り上げるように歌ってしまう", type: "pull" },
+        { text: "高音は楽に出せる方です", type: "light" },
+        { text: "高音になると裏声に切り替わりやすい", type: "flip" },
+        { text: "高音は力強く出したいけど難しい", type: "mix" }
+      ]
+    },
+    {
+      question: "低音域はどうですか？",
+      options: [
+        { text: "低音も力強く歌えます", type: "pull" },
+        { text: "低音のボリュームが出にくいです", type: "light" },
+        { text: "低音は地声でしっかり出ます", type: "flip" },
+        { text: "低音域は比較的得意です", type: "mix" }
+      ]
+    },
+    {
+      question: "長いフレーズを歌うとき...",
+      options: [
+        { text: "息が続かなくて苦しくなります", type: "pull" },
+        { text: "息は持つけど、声が弱くなりがちです", type: "light" },
+        { text: "途中で裏声になってしまいます", type: "flip" },
+        { text: "なんとか歌えるけど、もっと楽に歌いたいです", type: "mix" }
+      ]
+    },
+    {
+      question: "あなたの年代は？",
+      options: [
+        { text: "10代", type: "mix" },
+        { text: "20代〜30代", type: "light" },
+        { text: "40代以上", type: "pull" },
+        { text: "年代に関係なく歌いたい", type: "flip" }
+      ]
+    },
+    {
+      question: "声の響きについて",
+      options: [
+        { text: "声がフラットで響きが少ない", type: "pull" },
+        { text: "息っぽい声になりがち", type: "light" },
+        { text: "地声と裏声の差が大きい", type: "flip" },
+        { text: "もっと豊かな響きが欲しい", type: "mix" }
+      ]
+    },
+    {
+      question: "歌声の音量について",
+      options: [
+        { text: "音量を一定に保つのが難しい", type: "pull" },
+        { text: "小さな声になりがち", type: "light" },
+        { text: "音量の調整が難しい", type: "flip" },
+        { text: "もっと大きな声で歌いたい", type: "mix" }
+      ]
+    },
+    {
+      question: "首や喉の力について",
+      options: [
+        { text: "歌うと首や喉に力が入ります", type: "pull" },
+        { text: "力は入らないけど、声が弱いです", type: "light" },
+        { text: "高音で力が入ってしまいます", type: "flip" },
+        { text: "適度に力は入るけど、コントロールしたいです", type: "mix" }
+      ]
+    },
+    {
+      question: "がなり声について",
+      options: [
+        { text: "よくがなり声になってしまいます", type: "pull" },
+        { text: "がなり声にはなりません", type: "light" },
+        { text: "時々がなってしまいます", type: "flip" },
+        { text: "がなりたくないけど、力強く歌いたいです", type: "mix" }
+      ]
+    },
+    {
+      question: "歌っていて疲れやすさは？",
+      options: [
+        { text: "すぐに疲れて声が枯れます", type: "pull" },
+        { text: "疲れにくいけど、物足りなさを感じます", type: "light" },
+        { text: "後半になると声が不安定になります", type: "flip" },
+        { text: "そこそこ疲れるけど、もっと効率的に歌いたいです", type: "mix" }
+      ]
+    },
+    {
+      question: "理想の歌声は？",
+      options: [
+        { text: "パワフルで迫力のある歌声", type: "pull" },
+        { text: "透明感のある美しい歌声", type: "light" },
+        { text: "滑らかで自然な歌声", type: "flip" },
+        { text: "力強くて豊かな響きの歌声", type: "mix" }
+      ]
+    },
+    {
+      question: "現在の歌の悩みは？",
+      options: [
+        { text: "力任せになってしまう", type: "pull" },
+        { text: "声が小さくて聞こえにくい", type: "light" },
+        { text: "声区の切り替えが上手くいかない", type: "flip" },
+        { text: "基本的な技術を身につけたい", type: "mix" }
+      ]
+    }
+  ];
+
+  const voiceTypes = {
+    pull: {
+      name: "プルチェスト",
+      description: "地声がアクティブで、パワフルな歌声が特徴。高音を張り上げる傾向があり、首に力が入りやすいタイプです。",
+      characteristics: [
+        "地声がアクティブ",
+        "高音を張り上げる",
+        "音量を一定にできない",
+        "首の力が入る",
+        "音がフラット気味になる",
+        "がなり声が混ざる"
+      ],
+      recommendedSongs: [
+        "力強いロックバラード",
+        "パワフルなポップス",
+        "エネルギッシュなアップテンポ曲",
+        "感情的なバラード"
+      ],
+      training: "発声の基礎練習と脱力テクニックを重点的に行いましょう。"
+    },
+    light: {
+      name: "ライトチェスト",
+      description: "息っぽい声で透明感があり、20代から30代の女性に多いタイプ。優しい歌声が魅力ですが、ボリューム不足が課題です。",
+      characteristics: [
+        "息っぽい声",
+        "低音のボリュームが出ない",
+        "長いフレーズが苦手",
+        "20代から30代の女性に多い",
+        "地声が霞んで聞こえることがある",
+        "裏声から地声の戻しが苦手",
+        "もっと大きい声を出したい"
+      ],
+      recommendedSongs: [
+        "透明感のあるバラード",
+        "優しいアコースティック曲",
+        "繊細な表現の楽曲",
+        "ミディアムテンポの楽曲"
+      ],
+      training: "胸声の強化と息の流れを意識した練習を行いましょう。"
+    },
+    flip: {
+      name: "フリップ",
+      description: "低音は地声で出るが、高音になると裏声に切り替わりやすいタイプ。声区の境界がはっきりしているのが特徴です。",
+      characteristics: [
+        "低音が地声で出るが少し音が高くなるとひっくり返る",
+        "地声一声がくっきりと分かれて聞こえる",
+        "ひっくり返らないようにするため首に力が入ることがある",
+        "長いフレーズは苦手",
+        "後半の盛り上がるところで物足りなくなる"
+      ],
+      recommendedSongs: [
+        "音域の幅が狭い楽曲",
+        "メロディーラインが安定した曲",
+        "ミックスボイスの練習に適した曲",
+        "段階的に音域を広げられる楽曲"
+      ],
+      training: "ミックスボイスの習得と声区の滑らかな移行練習が重要です。"
+    },
+    mix: {
+      name: "ミックス",
+      description: "適度に叫ぶことなく力強く高音に入ることができるタイプ。基本的な歌唱力があり、より高度な技術習得を目指すレベルです。",
+      characteristics: [
+        "適度に叫ぶことなく力強く高音に入ることができるタイプ",
+        "大体の曲は歌えるがさらに難しいトレーニングで理想に近づいていきたい！",
+        "より難易度の高いトレーニングを行う"
+      ],
+      recommendedSongs: [
+        "幅広いジャンルの楽曲",
+        "難易度の高い楽曲",
+        "表現力が求められる楽曲",
+        "テクニカルな楽曲"
+      ],
+      training: "高度なテクニックと表現力の向上に焦点を当てた練習を行いましょう。"
+    }
+  };
+
+  const handleAnswer = (selectedOption) => {
+    const newAnswers = [...answers, selectedOption];
+    setAnswers(newAnswers);
+
+    if (currentQuestion < questions.length - 1) {
+      setCurrentQuestion(currentQuestion + 1);
+    } else {
+      // 診断結果を計算
+      const typeCount = {
+        pull: 0,
+        light: 0,
+        flip: 0,
+        mix: 0
+      };
+
+      newAnswers.forEach(answer => {
+        typeCount[answer.type]++;
+      });
+
+      const resultType = Object.keys(typeCount).reduce((a, b) => 
+        typeCount[a] > typeCount[b] ? a : b
+      );
+
+      setResult(resultType);
+    }
+  };
+
+  const resetDiagnosis = () => {
+    setCurrentQuestion(0);
+    setAnswers([]);
+    setResult(null);
+  };
+
+  const getProgressPercentage = () => {
+    return ((currentQuestion + 1) / questions.length) * 100;
+  };
+
+  if (result) {
+    const resultData = voiceTypes[result];
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-purple-50 to-pink-50 p-4">
+        <div className="max-w-4xl mx-auto">
+          <div className="bg-white rounded-xl shadow-lg p-8">
+            <div className="text-center mb-8">
+              <h1 className="text-3xl font-bold text-gray-800 mb-2">診断結果</h1>
+              <div className="w-20 h-1 bg-gradient-to-r from-purple-500 to-pink-500 mx-auto rounded"></div>
+            </div>
+
+            <div className="bg-gradient-to-r from-purple-100 to-pink-100 rounded-lg p-6 mb-6">
+              <h2 className="text-2xl font-bold text-center text-gray-800 mb-4">{resultData.name}</h2>
+              <p className="text-gray-700 text-center text-lg leading-relaxed">{resultData.description}</p>
+            </div>
+
+            <div className="grid md:grid-cols-2 gap-6 mb-8">
+              <div className="bg-blue-50 rounded-lg p-6">
+                <h3 className="text-xl font-semibold text-blue-800 mb-4">特徴</h3>
+                <ul className="space-y-2">
+                  {resultData.characteristics.map((char, index) => (
+                    <li key={index} className="flex items-start">
+                      <span className="text-blue-600 mr-2">▼</span>
+                      <span className="text-gray-700">{char}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+
+              <div className="bg-green-50 rounded-lg p-6">
+                <h3 className="text-xl font-semibold text-green-800 mb-4">おすすめの曲</h3>
+                <ul className="space-y-2">
+                  {resultData.recommendedSongs.map((song, index) => (
+                    <li key={index} className="flex items-start">
+                      <span className="text-green-600 mr-2">♪</span>
+                      <span className="text-gray-700">{song}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </div>
+
+            <div className="bg-yellow-50 rounded-lg p-6 mb-8">
+              <h3 className="text-xl font-semibold text-yellow-800 mb-3">トレーニングアドバイス</h3>
+              <p className="text-gray-700">{resultData.training}</p>
+            </div>
+
+            <div className="text-center">
+              <button
+                onClick={resetDiagnosis}
+                className="bg-gradient-to-r from-purple-500 to-pink-500 text-white px-8 py-3 rounded-lg font-semibold hover:from-purple-600 hover:to-pink-600 transition-all duration-300 shadow-lg hover:shadow-xl"
+              >
+                もう一度診断する
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="min-h-screen bg-gradient-to-br from-purple-50 to-pink-50 p-4">
+      <div className="max-w-3xl mx-auto">
+        <div className="bg-white rounded-xl shadow-lg p-8">
+          <div className="text-center mb-8">
+            <h1 className="text-3xl font-bold text-gray-800 mb-2">声タイプ診断</h1>
+            <p className="text-gray-600">あなたの声の特徴を診断して、最適な楽曲を見つけましょう</p>
+            <div className="w-20 h-1 bg-gradient-to-r from-purple-500 to-pink-500 mx-auto rounded mt-4"></div>
+          </div>
+
+          <div className="mb-6">
+            <div className="flex justify-between items-center mb-2">
+              <span className="text-sm text-gray-600">進捗状況</span>
+              <span className="text-sm text-gray-600">{currentQuestion + 1} / {questions.length}</span>
+            </div>
+            <div className="w-full bg-gray-200 rounded-full h-2">
+              <div 
+                className="bg-gradient-to-r from-purple-500 to-pink-500 h-2 rounded-full transition-all duration-300"
+                style={{ width: `${getProgressPercentage()}%` }}
+              ></div>
+            </div>
+          </div>
+
+          <div className="mb-8">
+            <h2 className="text-xl font-semibold text-gray-800 mb-6 text-center">
+              Q{currentQuestion + 1}. {questions[currentQuestion].question}
+            </h2>
+            
+            <div className="space-y-3">
+              {questions[currentQuestion].options.map((option, index) => (
+                <button
+                  key={index}
+                  onClick={() => handleAnswer(option)}
+                  className="w-full p-4 text-left bg-gray-50 hover:bg-gradient-to-r hover:from-purple-100 hover:to-pink-100 rounded-lg border border-gray-200 hover:border-purple-300 transition-all duration-300 hover:shadow-md"
+                >
+                  <span className="text-gray-700 font-medium">{option.text}</span>
+                </button>
+              ))}
+            </div>
+          </div>
+
+          <div className="text-center text-sm text-gray-500">
+            質問に答えて、あなたの声タイプを診断します
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default VoiceTypeDiagnosis;
